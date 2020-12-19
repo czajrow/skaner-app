@@ -1,0 +1,30 @@
+version: '3'
+services:
+  api:
+    container_name: skaner-api
+    restart: always
+    build: skaner-api
+    ports:
+      - 3001:3000
+  backend:
+    container_name: skaner-backend
+    restart: always
+    build: skaner-backend
+    ports:
+    - 3000:3000
+    links:
+      - db
+      - api
+  front:
+    container_name: skaner-frontend
+    restart: always
+    build: skaner-frontend
+    ports:
+      - 80:8080
+    links:
+      - backend
+  db:
+    container_name: mongo
+    image: mongo:4.4.2
+    ports:
+    - 27017:27017

@@ -1,5 +1,4 @@
 import express = require("express");
-import { PROBE } from "./classes/probe";
 import { Database } from "./utils/database";
 import { from } from "rxjs";
 import { switchMap } from "rxjs/operators";
@@ -12,7 +11,7 @@ app.use((req, res) => {
     req.next();
 });
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
     // body: none
     // response: { value: string }
     res.status(200);
@@ -26,20 +25,20 @@ app.get('/', (req, res) => {
         });
 });
 
-app.get('/api/probe', (req, res) => {
-    // body: none
-    // response: ICoordinates as JSON
-    res.status(200);
-    res.send(PROBE.getCoordinates());
-});
-
-app.put('/api/probe', (req, res) => {
-    // body: ICoordinates as JSON
-    // response: { success: boolean }
-    console.log('req.body', req.body);
-    res.status(200);
-    res.send({ success: true });
-});
+// app.get('/api/probe', (req, res) => {
+//     // body: none
+//     // response: ICoordinates as JSON
+//     res.status(200);
+//     res.send(PROBE.getCoordinates());
+// });
+//
+// app.put('/api/probe', (req, res) => {
+//     // body: ICoordinates as JSON
+//     // response: { success: boolean }
+//     console.log('req.body', req.body);
+//     res.status(200);
+//     res.send({ success: true });
+// });
 
 const port = 3000;
 database.connect().subscribe(() => {

@@ -3,6 +3,7 @@
 exitfn () {
     trap SIGINT
     echo; echo 'Aarghh!!'
+#    docker-compose down
 #    docker-compose rm -f
     exit
 }

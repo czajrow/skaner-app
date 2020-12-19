@@ -17,7 +17,7 @@ export class ProbeClient implements IProbe {
   }
 
   getCoordinates(): Observable<ICoordinates> {
-    const url = BASE_URL + '/probe';
+    const url = BASE_URL + '';
     const options = {
       responseType: 'json' as 'json',
     };
