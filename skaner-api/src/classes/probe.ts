@@ -1,13 +1,4 @@
-export interface ICoordinates {
-    x: number;
-    y: number;
-    z: number;
-}
-
-export interface IProbe {
-    moveProbe: (coordinates: ICoordinates) => void;
-    getCoordinates: () => ICoordinates;
-}
+import { ICoordinates, IProbe } from "./types";
 
 class Probe implements IProbe {
 

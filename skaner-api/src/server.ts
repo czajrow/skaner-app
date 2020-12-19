@@ -1,31 +1,27 @@
 import express = require("express");
-import { PROBE } from "./classes/probe";
+import bodyParser = require('body-parser')
+import { ICoordinates } from "./classes/probe";
+import { SCANNER } from "./classes/scanner";
 
 const app = express();
+const jsonParser = bodyParser.json()
 
 app.use((req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*')
     req.next();
 });
 
-app.get('/', (req, res) => {
-    // body: none
-    // response: { value: string }
-    res.status(200);
-    res.send({ total: 4, messages: [0, 1, 2, 3] });
-});
-
 app.get('/api/probe', (req, res) => {
     // body: none
     // response: ICoordinates as JSON
     res.status(200);
-    res.send(PROBE.getCoordinates());
+    res.send(SCANNER.getCoordinates());
 });
 
-app.put('/api/probe', (req, res) => {
+app.put('/api/probe', jsonParser, (req, res) => {
     // body: ICoordinates as JSON
     // response: { success: boolean }
-    console.log('req.body', req.body);
+    SCANNER.moveProbe(req.body as ICoordinates);
     res.status(200);
     res.send({ success: true });
 });
