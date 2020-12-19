@@ -1,0 +1,87 @@
+@import "src/assets/styles/variables";
+
+:host {
+  position: sticky;
+  top: 0;
+  display: block;
+  height: 100vh;
+}
+
+.app-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 192px;
+  height: 100%;
+  background: $color-violet-dark-hex;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 72px;
+    background-color: purple;
+    color: mediumpurple;
+  }
+
+  &__items {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 40px;
+    padding-left: 3 * $mainsize - 2px;
+    border-left: 2px solid transparent;
+    transform: none;
+
+    &:hover,
+    &--active {
+      background-color: plum;
+      color: purple;
+    }
+
+    &:hover {
+      background-color: mediumpurple;
+      text-decoration: none;
+    }
+
+    &--active {
+      background-color: plum;
+      border-color: purple;
+      font-weight: 900;
+    }
+  }
+
+  &__item-title {
+    width: 112px;
+    font-weight: 600;
+    margin-left: 2 * $mainsize;
+    color: rebeccapurple;
+  }
+
+  &__status {
+    width: 2em;
+    height: 2em;
+    border-radius: 25%;
+    border: 0.25em solid white;
+    transition-duration: 1s;
+    background-color: gray;
+
+    &__connected {
+      background-color: green;
+    }
+
+    &__scanning {
+      background-color: orange;
+    }
+
+    &__offline {
+      background-color: red;
+    }
+  }
+}

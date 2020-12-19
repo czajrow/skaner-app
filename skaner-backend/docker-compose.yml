@@ -1,0 +1,23 @@
+version: '3'
+services:
+  app:
+    container_name: scanner-app
+    restart: always
+    build: .
+    ports:
+    - 3000:3000
+    links:
+      - db
+  front:
+    container_name: scanner-frontend
+    restart: always
+    build: ../skaner-frontend
+    ports:
+      - 80:8080
+    links:
+      - app
+  db:
+    container_name: mongo
+    image: mongo:4.4.2
+    ports:
+    - 27017:27017

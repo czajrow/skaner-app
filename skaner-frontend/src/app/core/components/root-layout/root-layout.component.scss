@@ -1,0 +1,18 @@
+@import "src/assets/styles/variables";
+
+:host {
+  display: block;
+}
+
+.app-root-layout {
+  display: flex;
+  min-height: 100vh;
+  background: $color-violet-hex;
+
+  &__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 192px);
+  }
+}

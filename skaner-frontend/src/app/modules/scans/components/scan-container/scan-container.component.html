@@ -1,0 +1,18 @@
+<app-section
+  (click)="onClick()"
+  class="app-scan-container"
+>
+  <div app-section-header-slot>
+    {{ _scan.name }} ({{ _scan.status }}) <span *ngIf="!_isInProgress">{{ createDate }}</span>
+  </div>
+  <div
+    *ngIf="_isInProgress"
+    app-section-content-slot
+  >
+    <progress
+      [value]="_scanningService.progress$ | async"
+      max="1.0"
+      class="w-100"
+    ></progress>
+  </div>
+</app-section>

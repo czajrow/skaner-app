@@ -1,0 +1,9 @@
+@import "src/assets/styles/variables";
+
+.app-section {
+  &__container {
+    border: solid 2px powderblue;
+    border-radius: 10px;
+    background: white;
+  }
+}

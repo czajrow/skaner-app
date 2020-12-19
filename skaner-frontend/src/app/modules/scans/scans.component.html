@@ -1,0 +1,5 @@
+<app-scan-container
+  *ngFor="let scan of (_scansService.scans$ | async)"
+  [scan]="scan"
+  class="mb-2"
+></app-scan-container>

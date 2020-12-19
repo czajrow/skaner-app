@@ -1,0 +1,25 @@
+{
+  "name": "skaner-backend",
+  "version": "1.0.0",
+  "main": "dist/server.js",
+  "scripts": {
+    "bar": "yarn build-ts && (yarn watch-node & yarn watch-ts)",
+    "build-ts": "tsc --outDir dist/ src/server.ts",
+    "start": "yarn serve",
+    "serve": "node dist/server.js",
+    "watch-node": "nodemon dist/server.js",
+    "watch-ts": "tsc -w --outDir dist/ src/server.ts"
+  },
+  "author": "Adam Czajka",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.1.2"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.9",
+    "@types/mongoose": "^5.10.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.8",
+    "rxjs": "^6.6.3"
+  }
+}

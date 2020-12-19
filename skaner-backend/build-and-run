@@ -1,0 +1,15 @@
+#!/bin/zsh
+
+exitfn () {
+    trap SIGINT
+    echo; echo 'Aarghh!!'
+#    docker-compose rm -f
+    exit
+}
+
+trap "exitfn" INT            # Set up SIGINT trap to call function.
+
+
+docker-compose build --force-rm
+docker-compose up
+

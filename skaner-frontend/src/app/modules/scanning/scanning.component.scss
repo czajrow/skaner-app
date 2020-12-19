@@ -1,0 +1,14 @@
+
+.app-scanning {
+  &__form-row {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  &__buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
+}

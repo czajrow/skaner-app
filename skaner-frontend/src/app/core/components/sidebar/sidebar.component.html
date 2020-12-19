@@ -1,0 +1,25 @@
+<div class="app-sidebar">
+  <div class="app-sidebar__header">
+    <h1>Skaner</h1>
+    <div
+      [ngClass]="{
+        'app-sidebar__status': true,
+        'app-sidebar__status__connected': (_status | async) === _statusOfConnection.Connected,
+        'app-sidebar__status__scanning': (_status | async) === _statusOfConnection.Scanning,
+        'app-sidebar__status__offline': (_status | async) === _statusOfConnection.Offline
+        }"
+      class="ml-2"
+    ></div>
+  </div>
+
+  <div class="app-sidebar__items">
+    <a
+      *ngFor="let item of items"
+      [routerLink]="item.link"
+      routerLinkActive="app-sidebar__item--active"
+      class="app-sidebar__item"
+    >
+      <span class="app-sidebar__item-title">{{ item.title }}</span>
+    </a>
+  </div>
+</div>
