@@ -1,7 +1,7 @@
 import express = require("express");
 import bodyParser = require('body-parser')
 import { SCANNER } from "./classes/scanner";
-import { ICoordinates, IParameters, IResult, ScannerStatus } from "./classes/types";
+import { ICoordinates, IParameters, IScanStatus } from "./classes/types";
 
 const app = express();
 const jsonParser = bodyParser.json()
@@ -38,7 +38,7 @@ app.get('/api/status', (req, res) => {
     // body: none
     // response: ICoordinates as JSON
     res.status(200);
-    res.send({ status: SCANNER.getStatus() as ScannerStatus });
+    res.send({ status: SCANNER.getStatus() as IScanStatus });
 });
 
 app.get('/api/result', (req, res) => {
