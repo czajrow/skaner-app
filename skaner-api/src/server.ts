@@ -1,7 +1,7 @@
 import express = require("express");
 import bodyParser = require('body-parser')
-import { ICoordinates } from "./classes/probe";
 import { SCANNER } from "./classes/scanner";
+import { ICoordinates, IParameters, IResult, ScannerStatus } from "./classes/types";
 
 const app = express();
 const jsonParser = bodyParser.json()
@@ -15,7 +15,7 @@ app.get('/api/probe', (req, res) => {
     // body: none
     // response: ICoordinates as JSON
     res.status(200);
-    res.send(SCANNER.getCoordinates());
+    res.send(SCANNER.getProbeCoordinates());
 });
 
 app.put('/api/probe', jsonParser, (req, res) => {
@@ -24,6 +24,34 @@ app.put('/api/probe', jsonParser, (req, res) => {
     SCANNER.moveProbe(req.body as ICoordinates);
     res.status(200);
     res.send({ success: true });
+});
+
+app.post('/api/parameters', jsonParser, (req, res) => {
+    // body: ICoordinates as JSON
+    // response: { success: boolean }
+    SCANNER.scan(req.body as IParameters);
+    res.status(200);
+    res.send({ success: true });
+});
+
+app.get('/api/status', (req, res) => {
+    // body: none
+    // response: ICoordinates as JSON
+    res.status(200);
+    res.send({ status: SCANNER.getStatus() as ScannerStatus });
+});
+
+app.get('/api/result', (req, res) => {
+    // body: none
+    // response: ICoordinates as JSON
+    const result = SCANNER.getResult();
+    if (!!result) {
+        res.status(200);
+        res.send(result);
+    } else {
+        res.status(404);
+        res.send({ error: 'You have to finish scan before downloading results.' });
+    }
 });
 
 const port = 3001;
