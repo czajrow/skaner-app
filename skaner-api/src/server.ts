@@ -8,10 +8,6 @@ const app = express();
 const jsonParser = bodyParser.json()
 
 app.use(cors());
-// app.use((req, res) => {
-//     res.setHeader('Access-Control-Allow-Origin', '*')
-//     req.next();
-// });
 
 app.get('/api/probe', (req, res) => {
     // body: none

@@ -40,6 +40,9 @@ export class ProbeClient implements IProbe {
 
 }
 
+@Injectable({
+  providedIn: 'root',
+})
 export class ScannerClient {
 
   constructor(
@@ -52,5 +55,21 @@ export class ScannerClient {
     return this._http.get(url).pipe(
       map(status => status as IScanStatus),
     );
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ScansListClient {
+
+  constructor(
+    private readonly _http: HttpClient,
+  ) {
+  }
+
+  getScans(): Observable<any> {
+    const url = BASE_URL + '/results';
+    return this._http.get(url);
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ProbeClient } from './api-clients';
+import { ProbeClient, ScannerClient, ScansListClient } from './api-clients';
 import { switchMap, tap } from "rxjs/operators";
 
 @Injectable({
@@ -9,16 +9,19 @@ export class TestApiService {
 
   constructor(
     private readonly _probeClient: ProbeClient,
-  ) { }
+    private readonly _scannerClient: ScannerClient,
+    private readonly _scansListClient: ScansListClient,
+  ) {
+  }
 
   test(): void {
     this._probeClient.getCoordinates()
       .pipe(
-        tap(() => console.log('Testing Probe...')),
+        tap(() => console.log('Testing ProbeClient...')),
         tap(cord => console.log('getCoordinates', cord)),
       )
       .pipe(
-        switchMap(() => this._probeClient.moveProbe({x: 1, y: 2, z: 3})),
+        switchMap(() => this._probeClient.moveProbe({ x: 1, y: 2, z: 3 })),
         tap(() => console.log('moveProbe')),
       )
       .pipe(
@@ -26,5 +29,11 @@ export class TestApiService {
         tap(cord => console.log('getCoordinates', cord)),
       )
       .subscribe();
+
+    this._scansListClient.getScans()
+      .pipe(
+        tap(() => console.log('Testing ScansListClient...')),
+        tap(scans => console.log('getScans', scans)),
+      ).subscribe();
   }
 }
