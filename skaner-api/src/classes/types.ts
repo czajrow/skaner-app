@@ -10,19 +10,19 @@ export interface IProbe {
 }
 
 export interface IParameters {
-    name: string,
-    minX: number,
-    maxX: number,
-    stepX: number,
-    minY: number,
-    maxY: number,
-    stepY: number,
-    minZ: number,
-    maxZ: number,
-    stepZ: number,
-    minFrequency: number,
-    maxFrequency: number,
-    stepFrequency: number,
+    name: string;
+    minX: number;
+    maxX: number;
+    stepX: number;
+    minY: number;
+    maxY: number;
+    stepY: number;
+    minZ: number;
+    maxZ: number;
+    stepZ: number;
+    minFrequency: number;
+    maxFrequency: number;
+    stepFrequency: number;
 }
 
 export enum ScannerStatus {
