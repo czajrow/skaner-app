@@ -36,14 +36,14 @@ app.post('/api/parameters', jsonParser, (req, res) => {
 
 app.get('/api/status', (req, res) => {
     // body: none
-    // response: ICoordinates as JSON
+    // response: IScanStatus as JSON
     res.status(200);
     res.send({ status: SCANNER.getStatus() as IScanStatus });
 });
 
 app.get('/api/result', (req, res) => {
     // body: none
-    // response: ICoordinates as JSON
+    // response: (IResult | { error: string }) as JSON
     const result = SCANNER.getResult();
     if (!!result) {
         res.status(200);

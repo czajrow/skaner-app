@@ -28,23 +28,23 @@ class Scanner implements IScanner {
             return;
         }
         this._params = params;
-        interval(200).pipe(
+        interval(20).pipe(
             take(100),
             finalize(() => {
                 this._result = {
                     parameters: this._params,
-                    result: 'This is result of the scan',
+                    result: 'This is result of the scan' + new Date().valueOf(),
                 };
                 this._scanStatus.next({
                     scannerStatus: ScannerStatus.Done,
                     progress: null
                 });
             }),
-            ).subscribe((count: number) => {
-                const progress: IProgress = {
-                    done: count,
-                    total: 100,
-                }
+        ).subscribe((count: number) => {
+            const progress: IProgress = {
+                done: count,
+                total: 100,
+            }
             if (count > 80) {
                 this._scanStatus.next({
                     scannerStatus: ScannerStatus.Postprocessing,
@@ -64,9 +64,10 @@ class Scanner implements IScanner {
     }
 
     getResult(): IResult {
-        const result = this._result;
+        const result = { ...this._result };
         this._result = null;
         this._scanStatus.next({ scannerStatus: ScannerStatus.Connected, progress: null });
+        console.log('MY-getResult', result);
         return result;
     }
 }

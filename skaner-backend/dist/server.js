@@ -45,7 +45,6 @@ app.get('/api/probe', function (req, res) {
     });
 });
 app.put('/api/probe', jsonParser, function (req, res) {
-    // request({ url: url, method: 'PUT', json: {foo: "bar", woo: "car"}}, callback)
     // body: ICoordinates as JSON
     // response: { success: boolean }
     var url = BASE_URL + '/probe';
@@ -60,11 +59,9 @@ app.put('/api/probe', jsonParser, function (req, res) {
             res.send(response.body);
         }
     });
-    request({ url: url, method: 'PUT', json: true }, function (err, res, body) {
+    request({ url: url, method: 'PUT', json: req.body }, function (err, res, body) {
         subject.next({ err: err, body: body });
     });
-    // res.status(200);
-    // res.send({ success: true });
 });
 var port = 3000;
 database.connect().subscribe(function () {

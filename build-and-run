@@ -4,7 +4,8 @@ exitfn () {
     trap SIGINT
     echo; echo 'Aarghh!!'
 #    docker-compose down
-#    docker-compose rm -f
+    docker-compose rm -f
+    docker rmi "$(docker images -f "dangling=true" -q)"
     exit
 }
 
@@ -12,5 +13,5 @@ trap "exitfn" INT            # Set up SIGINT trap to call function.
 
 
 docker-compose build --force-rm
-docker-compose up
+docker-compose up --no-build
 
