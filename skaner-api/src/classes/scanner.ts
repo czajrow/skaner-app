@@ -71,7 +71,6 @@ class Scanner implements IScanner {
         const result = { ...this._result };
         this._result = null;
         this._scanStatus.next({ scannerStatus: ScannerStatus.Connected, progress: null });
-        console.log('MY-getResult', result);
         return result;
     }
 }

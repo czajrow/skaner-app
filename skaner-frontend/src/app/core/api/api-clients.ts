@@ -94,7 +94,7 @@ export class ScansListClient {
   }
 
   getScans(): Observable<any> {
-    const url = BASE_URL + '/results';
+    const url = BASE_URL + '/scans';
     return this._http.get(url);
   }
 }

@@ -1,1 +1,12 @@
-<p>current-scan works!</p>
+<div *ngIf="_scanInProgress$ | async; else noScanInProgress">
+  <p>Scan in progress</p>
+  <p>{{ _parameters | json }}</p>
+  <progress
+    [max]="(_progress$ | async)?.total"
+    [value]="(_progress$ | async)?.done"
+  ></progress>
+</div>
+
+<ng-template #noScanInProgress>
+  <p>No scan in progress</p>
+</ng-template>
