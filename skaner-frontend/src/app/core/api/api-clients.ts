@@ -1,4 +1,4 @@
-import { ICoordinates, IProbe, IScanStatus } from './types';
+import { ICoordinates, IParameters, IProbe, IScanStatus } from './types';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -43,7 +43,7 @@ export class ProbeClient implements IProbe {
 @Injectable({
   providedIn: 'root',
 })
-export class ScannerClient {
+export class StatusClient {
 
   constructor(
     private readonly _http: HttpClient,
@@ -54,6 +54,31 @@ export class ScannerClient {
     const url = BASE_URL + '/status';
     return this._http.get(url).pipe(
       map(status => (status as { status: IScanStatus }).status as IScanStatus),
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class CurrentScanClient {
+
+  constructor(
+    private readonly _http: HttpClient,
+  ) {
+  }
+
+  getParameters(): Observable<IParameters> {
+    const url = BASE_URL + '/parameters';
+    return this._http.get(url).pipe(
+      map(parameters => parameters as IParameters),
+    );
+  }
+
+  startScan(parameters: IParameters): Observable<void> {
+    const url = BASE_URL + '/parameters';
+    return this._http.post(url, parameters).pipe(
+      map(() => null),
     );
   }
 }

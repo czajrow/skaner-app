@@ -54,4 +54,5 @@ export interface IScanner {
     scan: (params: IParameters) => void;
     getStatus: () => IScanStatus;
     getResult: () => IResult;
+    getParameters: () => IParameters;
 }

@@ -28,7 +28,7 @@ class Scanner implements IScanner {
             return;
         }
         this._params = params;
-        interval(20).pipe(
+        interval(80).pipe(
             take(100),
             finalize(() => {
                 this._result = {
@@ -57,6 +57,10 @@ class Scanner implements IScanner {
                 })
             }
         })
+    }
+
+    getParameters(): IParameters {
+        return { ...this._params };
     }
 
     getStatus(): IScanStatus {

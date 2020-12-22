@@ -67,6 +67,25 @@ app.put('/api/probe', jsonParser, (req, res) => {
     });
 });
 
+app.get('/api/parameters', (req, res) => {
+    // body: none
+    // response: IParameters as JSON
+    const url = BASE_API_URL + '/parameters';
+    const subject = new Subject<any>();
+    subject.asObservable().pipe(first()).subscribe(response => {
+        if (response.err) {
+            res.status(500);
+            res.send(response.err);
+        } else {
+            res.status(200);
+            res.send(response.body);
+        }
+    })
+    request({ url, method: 'GET', json: true }, (err, res, body) => {
+        subject.next({ err, body })
+    });
+});
+
 app.post('/api/parameters', jsonParser, (req, res) => {
     // body: IParameters as JSON
     // response: { success: boolean }

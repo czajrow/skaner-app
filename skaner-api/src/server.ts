@@ -24,8 +24,15 @@ app.put('/api/probe', jsonParser, (req, res) => {
     res.send({ success: true });
 });
 
+app.get('/api/parameters', (req, res) => {
+    // body: none
+    // response: IParameters as JSON
+    res.status(200);
+    res.send(SCANNER.getParameters());
+});
+
 app.post('/api/parameters', jsonParser, (req, res) => {
-    // body: ICoordinates as JSON
+    // body: IParameters as JSON
     // response: { success: boolean }
     SCANNER.scan(req.body as IParameters);
     res.status(200);

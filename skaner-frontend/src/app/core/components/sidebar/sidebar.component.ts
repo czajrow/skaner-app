@@ -31,6 +31,11 @@ export class SidebarComponent implements OnInit {
       link: '/scanning',
       icon: 'scanning',
     },
+    {
+      title: 'Current Scan',
+      link: '/current-scan',
+      icon: 'current-scan',
+    },
   ];
 
   constructor(
