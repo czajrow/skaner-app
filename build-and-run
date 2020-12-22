@@ -13,5 +13,5 @@ trap "exitfn" INT            # Set up SIGINT trap to call function.
 
 
 docker-compose build --force-rm
-docker-compose up --no-build
+docker-compose up
 

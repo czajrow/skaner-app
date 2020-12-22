@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ScanningService } from '@/core/services/scanning.service';
-import { ScansService } from '@/core/services/scans.service';
-import { StatusOfConnection, StatusService } from '../../core/services/status.service';
-import { TestApiService } from '../../core/api/test-api.service';
+import { StatusService } from '@/core/services/status.service';
+import { TestApiService } from '@/core/api/test-api.service';
+import { ScannerStatus } from '@/core/api/types';
 
 @Component({
   selector: 'app-scanning',
@@ -14,13 +13,11 @@ export class ScanningComponent implements OnInit {
 
   public _errors: Set<string> = new Set<string>();
   public _formGroup: FormGroup;
-  public _statusOfConnection = StatusOfConnection;
+  public _scannerStatus = ScannerStatus;
 
   constructor(
     public readonly _statusService: StatusService,
     private readonly _formBuilder: FormBuilder,
-    private readonly _scansService: ScansService,
-    private readonly _scanningService: ScanningService,
     private readonly _testApiService: TestApiService,
   ) {
     this._formGroup = this._formBuilder.group({
@@ -82,8 +79,6 @@ export class ScanningComponent implements OnInit {
 
 
   public onSubmit(): void {
-    this._scanningService.scan();
-    this._scansService.addScan(this._formGroup.controls.name.value);
     this.onDismiss();
   }
 

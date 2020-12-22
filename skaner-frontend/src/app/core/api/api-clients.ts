@@ -53,7 +53,7 @@ export class ScannerClient {
   getStatus(): Observable<IScanStatus> {
     const url = BASE_URL + '/status';
     return this._http.get(url).pipe(
-      map(status => status as IScanStatus),
+      map(status => (status as { status: IScanStatus }).status as IScanStatus),
     );
   }
 }

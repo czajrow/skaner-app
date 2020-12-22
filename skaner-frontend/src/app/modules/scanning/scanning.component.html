@@ -106,7 +106,7 @@
         Fill Form
       </button>
       <button
-        [disabled]="_formGroup.invalid || (_statusService.status$ | async) !== _statusOfConnection.Connected"
+        [disabled]="_formGroup.invalid || (_statusService.status$ | async).scannerStatus !== _scannerStatus.Connected"
         (click)="onSubmit()"
         class="btn btn-success ml-2"
       >
