@@ -1,0 +1,26 @@
+@import "src/assets/styles/variables";
+
+:host {
+  display: block;
+}
+
+.app-current-scan {
+
+  &__header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__progress-percents {
+    padding: 0.5 * $mainsize;
+    width: fit-content;
+    height: fit-content;
+    border: 1px solid $color-violet-light-hex;
+    border-radius: 0.5 * $mainsize;
+    background-color: $color-violet-very-light-hex;
+
+    font-family: monospace;
+  }
+}

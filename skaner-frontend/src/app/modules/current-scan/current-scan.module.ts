@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CurrentScanComponent } from './current-scan.component';
+import { ParametersViewModule } from "../../shared/parameters-view/parameters-view.module";
+import { SectionModule } from "../../shared/section/section.module";
 
 
 
@@ -9,8 +11,10 @@ import { CurrentScanComponent } from './current-scan.component';
     exports: [
         CurrentScanComponent
     ],
-    imports: [
-        CommonModule
-    ]
+  imports: [
+    CommonModule,
+    ParametersViewModule,
+    SectionModule
+  ]
 })
 export class CurrentScanModule { }

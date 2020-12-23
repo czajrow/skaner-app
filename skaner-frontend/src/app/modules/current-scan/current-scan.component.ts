@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IParameters, IProgress, IScanStatus } from '@/core/api/types';
+import { IParameters, IProgress, IScanStatus, IScanViewModel } from '@/core/api/types';
 import { Observable } from 'rxjs';
 import { CurrentScanClient } from '@/core/api/api-clients';
 import { StatusService } from '@/core/services/status.service';

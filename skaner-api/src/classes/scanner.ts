@@ -5,6 +5,8 @@ import { finalize, take } from "rxjs/operators";
 
 class Scanner implements IScanner {
 
+    private _scanningPointsNum: number = 100000;
+
     private readonly _probe: IProbe;
     private readonly _scanStatus: BehaviorSubject<IScanStatus>;
     private _params: IParameters;
@@ -29,7 +31,7 @@ class Scanner implements IScanner {
         }
         this._params = params;
         interval(80).pipe(
-            take(100),
+            take(this._scanningPointsNum),
             finalize(() => {
                 this._result = {
                     parameters: this._params,
@@ -43,9 +45,9 @@ class Scanner implements IScanner {
         ).subscribe((count: number) => {
             const progress: IProgress = {
                 done: count,
-                total: 100,
+                total: this._scanningPointsNum,
             }
-            if (count > 80) {
+            if (count > 0.8 * this._scanningPointsNum) {
                 this._scanStatus.next({
                     scannerStatus: ScannerStatus.Postprocessing,
                     progress
