@@ -13,7 +13,6 @@ import { map } from "rxjs/operators";
 export class CurrentScanComponent implements OnInit {
 
   public _parameters: IParameters;
-  public _scanInProgress$: Observable<boolean>;
   public _progress$: Observable<IProgress>;
 
   constructor(
@@ -23,9 +22,8 @@ export class CurrentScanComponent implements OnInit {
     this._currentScanClient.getParameters().subscribe(params => {
       this._parameters = params;
     });
-    this._scanInProgress$ = this._statusService.scanInProgress$;
     this._progress$ = this._statusService.status$.pipe(
-      map((status: IScanStatus) => status.progress),
+      map((status: IScanStatus) => status?.progress),
     );
   }
 

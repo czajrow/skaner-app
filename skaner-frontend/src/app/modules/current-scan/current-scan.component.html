@@ -1,4 +1,4 @@
-<div *ngIf="_scanInProgress$ | async; else noScanInProgress">
+<div *ngIf="!!(_progress$ | async); else noScanInProgress">
   <p>Scan in progress</p>
   <p>{{ _parameters | json }}</p>
   <progress

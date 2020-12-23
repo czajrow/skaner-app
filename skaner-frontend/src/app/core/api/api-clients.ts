@@ -86,7 +86,7 @@ export class CurrentScanClient {
 @Injectable({
   providedIn: 'root',
 })
-export class ScansListClient {
+export class ScansClient {
 
   constructor(
     private readonly _http: HttpClient,
