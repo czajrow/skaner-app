@@ -29,8 +29,9 @@ class Scanner implements IScanner {
         if (this._scanStatus.value.scannerStatus !== ScannerStatus.Connected) {
             return;
         }
+        this._scanningPointsNum = Scanner.calculateScanningTime(params);
         this._params = params;
-        interval(80).pipe(
+        interval(100).pipe(
             take(this._scanningPointsNum),
             finalize(() => {
                 this._result = {
@@ -74,6 +75,15 @@ class Scanner implements IScanner {
         this._result = null;
         this._scanStatus.next({ scannerStatus: ScannerStatus.Connected, progress: null });
         return result;
+    }
+    
+    private static calculateScanningTime(params: IParameters): number {
+        const x = Math.floor((params.maxX - params.minX) / params.stepX);
+        const y = Math.floor((params.maxY - params.minX) / params.stepX);
+        const z = Math.floor((params.maxZ - params.minZ) / params.stepZ);
+
+        const n = x * y * z;
+        return n / 1000;
     }
 }
 
