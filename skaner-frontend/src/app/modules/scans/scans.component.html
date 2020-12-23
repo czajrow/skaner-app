@@ -1,7 +1,17 @@
+<div class="w-100 mb-2 d-flex flex-row-reverse">
+  <button
+    (click)="onToggleEditMode()"
+    class="btn btn-primary"
+  >
+    {{ _editMode ? 'End Edit' : 'Edit' }}
+  </button>
+</div>
 <ng-container *ngIf="_scans?.length > 0; else noScansInfo">
   <app-scan-container
     *ngFor="let scan of _scans"
     [scan]="scan"
+    [editMode]="_editMode"
+    (deleted)="getScans()"
     class="mb-2"
   ></app-scan-container>
 </ng-container>

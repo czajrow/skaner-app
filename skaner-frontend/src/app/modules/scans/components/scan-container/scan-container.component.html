@@ -7,9 +7,21 @@
       <h2 class="mr-2">
         {{ _scan?.parameters.name }}
       </h2>
-      <div class="app-scan__date">
+      <div
+        *ngIf="!editMode; else deleteButton"
+        class="app-scan__date"
+      >
         <h6 class="m-0 p-0">{{ _creationDate }}</h6>
       </div>
     </div>
   </div>
 </app-section>
+
+<ng-template #deleteButton>
+  <button
+    (click)="onDelete($event)"
+    class="btn btn-danger"
+  >
+    Delete
+  </button>
+</ng-template>

@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy } from
 import { ScansClient } from '@/core/api/api-clients';
 import { IScanStatus, IScanViewModel, ScannerStatus } from "../../core/api/types";
 import { StatusService } from "../../core/services/status.service";
-import { filter, first, pairwise, switchMap, tap } from "rxjs/operators";
+import { filter, first, pairwise, switchMap } from "rxjs/operators";
 import { Subscription } from "rxjs";
-import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-scans',
@@ -16,6 +15,7 @@ export class ScansComponent implements OnDestroy {
 
   public _scans: IScanViewModel[];
   private _sub: Subscription;
+  public _editMode = false;
 
   constructor(
     private readonly _scansClient: ScansClient,
@@ -38,7 +38,11 @@ export class ScansComponent implements OnDestroy {
     this._sub?.unsubscribe();
   }
 
-  private getScans(): void {
+  onToggleEditMode(): void {
+    this._editMode = !this._editMode;
+  }
+
+  public getScans(): void {
     this._scansClient.getScans().pipe(
       first(),
     ).subscribe(scans => {

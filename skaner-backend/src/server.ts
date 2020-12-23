@@ -153,6 +153,31 @@ app.get('/api/scans', (req, res) => {
     });
 });
 
+app.delete('/api/scan/:scanId', (req, res) => {
+    const id: string = req.params.scanId;
+    const db = database.getDb();
+    const objId = database.getObjectId(id);
+
+    from(db.collection('scans').findOneAndDelete({ "_id": objId }))
+        .pipe(
+            switchMap(scan => {
+                const resultId: string = (scan as IScanViewModel).resultId;
+                const resObjId = database.getObjectId(resultId);
+                return from(db.collection('results').findOneAndDelete({ "_id": resObjId }))
+            })
+        )
+        .subscribe(
+            () => {
+                res.status(200);
+                res.send({ id });
+            },
+            error => {
+                res.status(404);
+                res.send({ error });
+            }
+        );
+});
+
 app.get('/api/result/:resultId', (req, res) => {
     const id: string = req.params.resultId;
     const db = database.getDb();

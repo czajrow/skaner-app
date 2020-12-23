@@ -107,6 +107,13 @@ export class ScansClient {
     );
   }
 
+  deleteScan(id: string): Observable<string> {
+    const url = BASE_URL + '/scan/' + id;
+    return this._http.delete(url).pipe(
+      map((scan: { id: string }) => scan.id),
+    );
+  }
+
   getResult(id: string): Observable<IResultViewModel> {
     const url = BASE_URL + '/result/' + id;
     return this._http.get(url).pipe(
