@@ -1,5 +1,9 @@
 @import "src/assets/styles/variables";
 
+:host {
+  display: block;
+}
+
 .app-section {
   &__container {
     border: solid 2px powderblue;

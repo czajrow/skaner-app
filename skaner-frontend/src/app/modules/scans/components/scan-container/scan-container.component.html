@@ -1,2 +1,15 @@
-{{ _scan | json }}
-<h1>{{ _creationDate }}</h1>
+<app-section
+  (click)="onClick()"
+  class="app-scan__container"
+>
+  <div app-section-header-slot>
+    <div class="app-scan__header-container">
+      <h2 class="mr-2">
+        {{ _scan?.parameters.name }}
+      </h2>
+      <div class="app-scan__date">
+        <h6 class="m-0 p-0">{{ _creationDate }}</h6>
+      </div>
+    </div>
+  </div>
+</app-section>

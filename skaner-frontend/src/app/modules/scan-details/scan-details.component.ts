@@ -1,61 +1,29 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { IScanViewModel } from '@/core/api/types';
+import { ActivatedRoute } from "@angular/router";
+import { ScansClient } from "../../core/api/api-clients";
 
 @Component({
   selector: 'app-scan-details',
   templateUrl: './scan-details.component.html',
   styleUrls: ['./scan-details.component.scss']
 })
-export class ScanDetailsComponent implements OnInit, OnDestroy {
-  //
-  // public _isInProgress = false;
-  // public createDate: string;
-  // public _scan: ScanViewModel;
-  // private _sub: Subscription;
-  //
-  // constructor(
-  //   private readonly _activatedRoute: ActivatedRoute,
-  //   private readonly _scansService: ScansService,
-  //   public readonly _scanningService: ScanningService,
-  //   public readonly _router: Router,
-  // ) {
-  //   const id = +this._activatedRoute.snapshot.paramMap.get('id');
-  //   this._scansService.scans$.pipe(
-  //     take(1),
-  //   ).subscribe(scans => {
-  //     this._scan = scans[id];
-  //     this.createDate = new Date(this._scan.createDate).toDateString();
-  //     this._isInProgress = this._scan.status !== ScanningStatus.Done;
-  //     if (this._isInProgress) {
-  //       this.watchScan();
-  //     }
-  //   });
-  // }
+export class ScanDetailsComponent {
 
-  ngOnInit(): void {
+  public _creationDate: string;
+  public _scan: IScanViewModel;
+
+  constructor(
+    private readonly _activatedRoute: ActivatedRoute,
+    private readonly _scansClient: ScansClient,
+  ) {
+    const id: string = _activatedRoute.snapshot.paramMap.get('id');
+    if (!!id) {
+      this._scansClient.getScan(id).subscribe((scan: IScanViewModel) => {
+            this._scan = scan;
+            const date = new Date(scan.creationDate);
+            this._creationDate = date.toLocaleString();
+      });
+    }
   }
-
-  // public onClick(): void {
-  //   if (this._scan) {
-  //     this._router.navigate(['scan-details', this._scan.id]);
-  //   }
-  // }
-  //
-  // public watchScan(): void {
-  //   this._sub?.unsubscribe();
-  //   this._sub = this._scanningService.status$.subscribe(status => {
-  //     this._scansService.updateScanStatus(this._scan.id, status);
-  //     if (status === ScanningStatus.Done) {
-  //       this._isInProgress = false;
-  //       this._sub.unsubscribe();
-  //     }
-  //   });
-  // }
-
-  ngOnDestroy(): void {
-    // this._sub?.unsubscribe();
-  }
-
 }
