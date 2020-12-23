@@ -19,6 +19,10 @@ const routes: Routes = [
     loadChildren: () => import('@/pages/current-scan-page/current-scan-page.module').then(m => m.CurrentScanPageModule),
   },
   {
+    path: 'probe',
+    loadChildren: () => import('@/pages/probe-page/probe-page.module').then(m => m.ProbePageModule),
+  },
+  {
     path: '**',
     redirectTo: 'scans',
   }
