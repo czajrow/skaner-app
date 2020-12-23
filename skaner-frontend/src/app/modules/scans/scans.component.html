@@ -1,5 +1,12 @@
-<!--<app-scan-container-->
-<!--  *ngFor="let scan of (_scansService.scans$ | async)"-->
-<!--  [scan]="scan"-->
-<!--  class="mb-2"-->
-<!--&gt;</app-scan-container>-->
+<ng-container *ngIf="_scans?.length > 0; else noScansInfo">
+  <app-scan-container
+    *ngFor="let scan of _scans"
+    [scan]="scan"
+    class="mb-2"
+  ></app-scan-container>
+</ng-container>
+
+<ng-template #noScansInfo>
+  <p>No scans yet.</p>
+  <p>{{ _scans?.length }}</p>
+</ng-template>

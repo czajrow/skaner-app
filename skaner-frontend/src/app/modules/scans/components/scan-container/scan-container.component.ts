@@ -1,61 +1,22 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Component, Input } from '@angular/core';
+import { IScanViewModel } from '@/core/api/types';
 
 @Component({
   selector: 'app-scan-container',
   templateUrl: './scan-container.component.html',
   styleUrls: ['./scan-container.component.scss']
 })
-export class ScanContainerComponent implements OnInit, OnDestroy {
-  //
-  // public _isInProgress = false;
-  //
-  // // public _status: ScanningStatus;
-  // public createDate: string;
-  // private _sub: Subscription;
-  //
-  // constructor(
-  //   public readonly _router: Router,
-  // ) {
-  // }
-  //
-  // public _scan: ScanViewModel;
-  //
-  // @Input() set scan(value: ScanViewModel) {
-  //   if (value) {
-  //     this._scan = value;
-  //     this.createDate = new Date(value.createDate).toDateString();
-  //     // this._status = value.status;
-  //     this._isInProgress = value.status !== ScanningStatus.Done;
-  //     if (this._isInProgress) {
-  //       this.watchScan();
-  //     }
-  //   }
-  // }
+export class ScanContainerComponent {
 
-  ngOnInit(): void {
+  public _creationDate: string;
+  public _scan: IScanViewModel;
+
+  @Input() set scan(value: IScanViewModel) {
+    if (value) {
+      this._scan = value;
+      const date = new Date(value.creationDate);
+      this._creationDate = date.toLocaleString();
+    }
   }
 
-  // public onClick(): void {
-  //   if (this._scan) {
-  //     this._router.navigate(['scan-details', this._scan.id]);
-  //   }
-  // }
-  //
-  // public watchScan(): void {
-  //   this._sub?.unsubscribe();
-  //   this._sub = this._scanningService.status$.subscribe(status => {
-  //     // this._status = status;
-  //     this._scansService.updateScanStatus(this._scan.id, status);
-  //     if (status === ScanningStatus.Done) {
-  //       this._isInProgress = false;
-  //       this._sub.unsubscribe();
-  //     }
-  //   });
-  // }
-
-  ngOnDestroy(): void {
-    // this._sub?.unsubscribe();
-  }
 }

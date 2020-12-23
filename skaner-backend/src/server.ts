@@ -5,7 +5,7 @@ import cors = require('cors');
 import { Database } from "./utils/database";
 import { from, Subject } from "rxjs";
 import { first, map, switchMap } from "rxjs/operators";
-import { IParameters, IResult, ScannerStatus } from './classes/types'
+import { IParameters, IResult, IScanViewModel, ScannerStatus } from './classes/types'
 
 const BASE_API_URL = 'http://api:3001/api'
 
@@ -134,8 +134,9 @@ app.get('/api/status', (req, res) => {
                         switchMap(resultId => {
                             return from(db.collection('scans').insertOne({
                                 parameters: scan.parameters,
-                                resultId: resultId
-                            }))
+                                resultId: resultId,
+                                creationDate: new Date().valueOf(),
+                            } as IScanViewModel));
                         })
                     ).subscribe();
             });
@@ -148,16 +149,26 @@ app.get('/api/scans', (req, res) => {
     const db = database.getDb();
     from(db.collection('scans').find().toArray()).subscribe((scans: []) => {
         res.status(200);
-        res.send({ scans });
+        res.send(scans);
     });
 });
 
-app.get('/api/results', (req, res) => {
+app.get('/api/result/:resultId', (req, res) => {
+    const id: string = req.params.resultId;
     const db = database.getDb();
-    from(db.collection('results').find().toArray()).subscribe((results: []) => {
-        res.status(200);
-        res.send({ results });
-    });
+    const objId = database.getObjectId(id);
+
+    from(db.collection('results').findOne({ "_id": objId }))
+        .subscribe(
+            (scan) => {
+                res.status(200);
+                res.send(scan);
+            },
+            error => {
+                res.status(404);
+                res.send({ error });
+            }
+        );
 });
 
 app.get('/api/scan/:scanId', (req, res) => {

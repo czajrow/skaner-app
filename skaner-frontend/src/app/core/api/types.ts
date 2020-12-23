@@ -49,3 +49,10 @@ export interface IParameters {
   maxFrequency: number;
   stepFrequency: number;
 }
+
+export interface IScanViewModel {
+  parameters: IParameters;
+  resultId: string;
+  creationDate: number;
+  _id: string;
+}

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ProbeClient, StatusClient, ScansClient, CurrentScanClient } from './api-clients';
-import { switchMap, tap } from 'rxjs/operators';
+import { filter, switchMap, tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ export class TestApiService {
   constructor(
     private readonly _probeClient: ProbeClient,
     private readonly _scannerClient: StatusClient,
-    private readonly _scansListClient: ScansClient,
+    private readonly _scansClient: ScansClient,
     private readonly _currentScanClient: CurrentScanClient,
   ) {
   }
@@ -31,10 +31,18 @@ export class TestApiService {
       )
       .subscribe();
 
-    this._scansListClient.getScans()
+    this._scansClient.getScans()
       .pipe(
         tap(() => console.log('Testing ScansClient...')),
         tap(scans => console.log('getScans', scans)),
+      ).subscribe();
+
+    this._scansClient.getScans()
+      .pipe(
+        tap(() => console.log('Testing ScansClient - single scan...')),
+        filter(scans => scans?.length > 0),
+        switchMap(scans => this._scansClient.getScan(scans[0]._id)),
+        tap(scan => console.log('getScan - single scan', scan)),
       ).subscribe();
 
     this._currentScanClient.getParameters()
