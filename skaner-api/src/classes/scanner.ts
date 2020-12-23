@@ -5,7 +5,7 @@ import { finalize, take } from "rxjs/operators";
 
 class Scanner implements IScanner {
 
-    private _scanningPointsNum: number = 100000;
+    private _scanningPointsNum: number = 100;
 
     private readonly _probe: IProbe;
     private readonly _scanStatus: BehaviorSubject<IScanStatus>;
