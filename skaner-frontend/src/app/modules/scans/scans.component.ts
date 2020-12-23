@@ -4,6 +4,7 @@ import { IScanStatus, IScanViewModel, ScannerStatus } from "../../core/api/types
 import { StatusService } from "../../core/services/status.service";
 import { filter, first, pairwise, switchMap, tap } from "rxjs/operators";
 import { Subscription } from "rxjs";
+import { ToastrService } from "ngx-toastr";
 
 @Component({
   selector: 'app-scans',

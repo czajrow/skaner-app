@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CurrentScanComponent } from './current-scan.component';
 import { ParametersViewModule } from "../../shared/parameters-view/parameters-view.module";
 import { SectionModule } from "../../shared/section/section.module";
+import { InfoBoxModule } from "../../shared/info-box/info-box.module";
 
 
 
@@ -14,7 +15,8 @@ import { SectionModule } from "../../shared/section/section.module";
   imports: [
     CommonModule,
     ParametersViewModule,
-    SectionModule
+    SectionModule,
+    InfoBoxModule
   ]
 })
 export class CurrentScanModule { }

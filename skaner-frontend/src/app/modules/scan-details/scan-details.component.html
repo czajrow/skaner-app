@@ -21,6 +21,10 @@
   <div app-section-header-slot>
     <h2>Scan result visualization</h2>
   </div>
+
+  <div app-section-content-slot>
+    {{ _result | json }}
+  </div>
 </app-section>
 
 

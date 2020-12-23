@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProbeComponent } from './probe.component';
+import { SectionModule } from "../../shared/section/section.module";
+import { InputModule } from "../../shared/input/input.module";
+import { ReactiveFormsModule } from "@angular/forms";
 
 
 
@@ -9,8 +12,11 @@ import { ProbeComponent } from './probe.component';
     exports: [
         ProbeComponent
     ],
-    imports: [
-        CommonModule
-    ]
+  imports: [
+    CommonModule,
+    SectionModule,
+    InputModule,
+    ReactiveFormsModule
+  ]
 })
 export class ProbeModule { }

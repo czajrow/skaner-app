@@ -1,4 +1,4 @@
-import { ICoordinates, IParameters, IProbe, IScanStatus, IScanViewModel } from './types';
+import { ICoordinates, IParameters, IProbe, IResultViewModel, IScanStatus, IScanViewModel } from './types';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -104,6 +104,13 @@ export class ScansClient {
     const url = BASE_URL + '/scan/' + id;
     return this._http.get(url).pipe(
       map(scan => scan as IScanViewModel),
+    );
+  }
+
+  getResult(id: string): Observable<IResultViewModel> {
+    const url = BASE_URL + '/result/' + id;
+    return this._http.get(url).pipe(
+      map(result => result as IResultViewModel),
     );
   }
 }

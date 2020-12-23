@@ -24,6 +24,7 @@
     "angular-plotly.js": "^3.0.0",
     "bootstrap": "^4.5.2",
     "express": "^4.17.1",
+    "ngx-toastr": "^13.2.0",
     "path": "^0.12.7",
     "plotly.js": "^1.58.1",
     "rxjs": "~6.5.5",

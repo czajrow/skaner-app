@@ -78,12 +78,12 @@ class Scanner implements IScanner {
     }
     
     private static calculateScanningTime(params: IParameters): number {
-        const x = Math.floor((params.maxX - params.minX) / params.stepX);
-        const y = Math.floor((params.maxY - params.minX) / params.stepX);
-        const z = Math.floor((params.maxZ - params.minZ) / params.stepZ);
+        const x = Math.floor((params.maxX - params.minX) / params.stepX) + 1;
+        const y = Math.floor((params.maxY - params.minX) / params.stepX) + 1;
+        const z = Math.floor((params.maxZ - params.minZ) / params.stepZ) + 1;
 
         const n = x * y * z;
-        return n / 1000;
+        return Math.floor(n / 1000);
     }
 }
 

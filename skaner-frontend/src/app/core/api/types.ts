@@ -56,3 +56,7 @@ export interface IScanViewModel {
   creationDate: number;
   _id: string;
 }
+
+export interface IResultViewModel {
+
+}
