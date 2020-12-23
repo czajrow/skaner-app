@@ -1,4 +1,4 @@
-import { ICoordinates, IProbe, IScanStatus } from './types';
+import { ICoordinates, IParameters, IProbe, IResultViewModel, IScanStatus, IScanViewModel } from './types';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
@@ -43,7 +43,7 @@ export class ProbeClient implements IProbe {
 @Injectable({
   providedIn: 'root',
 })
-export class ScannerClient {
+export class StatusClient {
 
   constructor(
     private readonly _http: HttpClient,
@@ -53,7 +53,7 @@ export class ScannerClient {
   getStatus(): Observable<IScanStatus> {
     const url = BASE_URL + '/status';
     return this._http.get(url).pipe(
-      map(status => status as IScanStatus),
+      map(status => (status as { status: IScanStatus }).status as IScanStatus),
     );
   }
 }
@@ -61,15 +61,63 @@ export class ScannerClient {
 @Injectable({
   providedIn: 'root',
 })
-export class ScansListClient {
+export class CurrentScanClient {
 
   constructor(
     private readonly _http: HttpClient,
   ) {
   }
 
-  getScans(): Observable<any> {
-    const url = BASE_URL + '/results';
-    return this._http.get(url);
+  getParameters(): Observable<IParameters> {
+    const url = BASE_URL + '/parameters';
+    return this._http.get(url).pipe(
+      map(parameters => parameters as IParameters),
+    );
+  }
+
+  startScan(parameters: IParameters): Observable<void> {
+    const url = BASE_URL + '/parameters';
+    return this._http.post(url, parameters).pipe(
+      map(() => null),
+    );
+  }
+}
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ScansClient {
+
+  constructor(
+    private readonly _http: HttpClient,
+  ) {
+  }
+
+  getScans(): Observable<IScanViewModel[]> {
+    const url = BASE_URL + '/scans';
+    return this._http.get(url).pipe(
+      map(array => array as IScanViewModel[]),
+    );
+  }
+
+  getScan(id: string): Observable<IScanViewModel> {
+    const url = BASE_URL + '/scan/' + id;
+    return this._http.get(url).pipe(
+      map(scan => scan as IScanViewModel),
+    );
+  }
+
+  deleteScan(id: string): Observable<string> {
+    const url = BASE_URL + '/scan/' + id;
+    return this._http.delete(url).pipe(
+      map((scan: { id: string }) => scan.id),
+    );
+  }
+
+  getResult(id: string): Observable<IResultViewModel> {
+    const url = BASE_URL + '/result/' + id;
+    return this._http.get(url).pipe(
+      map(result => result as IResultViewModel),
+    );
   }
 }

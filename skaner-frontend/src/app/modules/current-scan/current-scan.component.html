@@ -1,0 +1,32 @@
+<div *ngIf="!!(_progress$ | async); else noScanInProgress">
+  <app-section>
+    <div app-section-header-slot>
+      <div class="app-current-scan__header-container">
+        <h2 class="mr-2">
+          {{ _parameters?.name }}
+        </h2>
+        <div class="app-current-scan__progress-percents">
+          <h6 class="m-0 p-0">{{ (((_progress$ | async).done / (_progress$ | async).total) * 100).toFixed(2).toString() }}%</h6>
+        </div>
+      </div>
+    </div>
+
+    <div app-section-content-slot>
+      <progress
+        [max]="(_progress$ | async).total"
+        [value]="(_progress$ | async).done"
+        class="w-100"
+      ></progress>
+      <hr>
+      <app-parameters-view
+        [parameters]="_parameters"
+      ></app-parameters-view>
+    </div>
+  </app-section>
+</div>
+
+<ng-template #noScanInProgress>
+  <app-info-box
+    info="No scan in progress"
+  ></app-info-box>
+</ng-template>

@@ -1,0 +1,9 @@
+:host {
+  display: block;
+}
+
+.app-parameters-view{
+  &__bold {
+    font-weight: bold;
+  }
+}

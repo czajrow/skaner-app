@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ScanningService } from '@/core/services/scanning.service';
-import { ScansService } from '@/core/services/scans.service';
-import { StatusOfConnection, StatusService } from '../../core/services/status.service';
-import { TestApiService } from '../../core/api/test-api.service';
+import { StatusService } from '@/core/services/status.service';
+import { CurrentScanClient } from '@/core/api/api-clients';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-scanning',
@@ -14,14 +13,12 @@ export class ScanningComponent implements OnInit {
 
   public _errors: Set<string> = new Set<string>();
   public _formGroup: FormGroup;
-  public _statusOfConnection = StatusOfConnection;
 
   constructor(
     public readonly _statusService: StatusService,
     private readonly _formBuilder: FormBuilder,
-    private readonly _scansService: ScansService,
-    private readonly _scanningService: ScanningService,
-    private readonly _testApiService: TestApiService,
+    private readonly _currentScanClient: CurrentScanClient,
+    private readonly _router: Router,
   ) {
     this._formGroup = this._formBuilder.group({
       name: [null, Validators.required],
@@ -44,7 +41,6 @@ export class ScanningComponent implements OnInit {
   }
 
   public onDismiss(): void {
-    this._testApiService.test();
     this._formGroup.patchValue({
       name: null,
       minX: null,
@@ -82,9 +78,9 @@ export class ScanningComponent implements OnInit {
 
 
   public onSubmit(): void {
-    this._scanningService.scan();
-    this._scansService.addScan(this._formGroup.controls.name.value);
+    this._currentScanClient.startScan(this._formGroup.value).subscribe();
     this.onDismiss();
+    this._router.navigate(['current-scan']);
   }
 
 }

@@ -4,9 +4,9 @@
     <div
       [ngClass]="{
         'app-sidebar__status': true,
-        'app-sidebar__status__connected': (_status | async) === _statusOfConnection.Connected,
-        'app-sidebar__status__scanning': (_status | async) === _statusOfConnection.Scanning,
-        'app-sidebar__status__offline': (_status | async) === _statusOfConnection.Offline
+        'app-sidebar__status__connected': (_status | async) === _scannerStatus.Connected,
+        'app-sidebar__status__scanning': (_status | async) === _scannerStatus.Scanning,
+        'app-sidebar__status__offline': (_status | async) === _scannerStatus.NotConnected
         }"
       class="ml-2"
     ></div>

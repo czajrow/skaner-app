@@ -1,0 +1,24 @@
+@import "src/assets/styles/variables";
+
+:host {
+  display: block;
+}
+
+.app-scan-details {
+
+  &__header-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__date {
+    padding: 1px;
+    width: fit-content;
+    height: fit-content;
+    border: 1px solid $color-violet-light-hex;
+    border-radius: 0.5 * $mainsize;
+    background-color: $color-violet-very-light-hex;
+  }
+}

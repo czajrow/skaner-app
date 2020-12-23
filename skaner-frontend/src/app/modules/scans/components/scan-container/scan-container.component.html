@@ -1,18 +1,27 @@
 <app-section
   (click)="onClick()"
-  class="app-scan-container"
+  class="app-scan__container"
 >
   <div app-section-header-slot>
-    {{ _scan.name }} ({{ _scan.status }}) <span *ngIf="!_isInProgress">{{ createDate }}</span>
-  </div>
-  <div
-    *ngIf="_isInProgress"
-    app-section-content-slot
-  >
-    <progress
-      [value]="_scanningService.progress$ | async"
-      max="1.0"
-      class="w-100"
-    ></progress>
+    <div class="app-scan__header-container">
+      <h2 class="mr-2">
+        {{ _scan?.parameters.name }}
+      </h2>
+      <div
+        *ngIf="!editMode; else deleteButton"
+        class="app-scan__date"
+      >
+        <h6 class="m-0 p-0">{{ _creationDate }}</h6>
+      </div>
+    </div>
   </div>
 </app-section>
+
+<ng-template #deleteButton>
+  <button
+    (click)="onDelete($event)"
+    class="btn btn-danger"
+  >
+    Delete
+  </button>
+</ng-template>

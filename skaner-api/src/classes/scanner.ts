@@ -5,6 +5,8 @@ import { finalize, take } from "rxjs/operators";
 
 class Scanner implements IScanner {
 
+    private _scanningPointsNum: number = 100;
+
     private readonly _probe: IProbe;
     private readonly _scanStatus: BehaviorSubject<IScanStatus>;
     private _params: IParameters;
@@ -27,9 +29,10 @@ class Scanner implements IScanner {
         if (this._scanStatus.value.scannerStatus !== ScannerStatus.Connected) {
             return;
         }
+        this._scanningPointsNum = Scanner.calculateScanningTime(params);
         this._params = params;
-        interval(20).pipe(
-            take(100),
+        interval(100).pipe(
+            take(this._scanningPointsNum),
             finalize(() => {
                 this._result = {
                     parameters: this._params,
@@ -43,9 +46,9 @@ class Scanner implements IScanner {
         ).subscribe((count: number) => {
             const progress: IProgress = {
                 done: count,
-                total: 100,
+                total: this._scanningPointsNum,
             }
-            if (count > 80) {
+            if (count > 0.8 * this._scanningPointsNum) {
                 this._scanStatus.next({
                     scannerStatus: ScannerStatus.Postprocessing,
                     progress
@@ -59,6 +62,10 @@ class Scanner implements IScanner {
         })
     }
 
+    getParameters(): IParameters {
+        return { ...this._params };
+    }
+
     getStatus(): IScanStatus {
         return this._scanStatus.value
     }
@@ -67,8 +74,16 @@ class Scanner implements IScanner {
         const result = { ...this._result };
         this._result = null;
         this._scanStatus.next({ scannerStatus: ScannerStatus.Connected, progress: null });
-        console.log('MY-getResult', result);
         return result;
+    }
+    
+    private static calculateScanningTime(params: IParameters): number {
+        const x = Math.floor((params.maxX - params.minX) / params.stepX) + 1;
+        const y = Math.floor((params.maxY - params.minX) / params.stepX) + 1;
+        const z = Math.floor((params.maxZ - params.minZ) / params.stepZ) + 1;
+
+        const n = x * y * z;
+        return Math.floor(n / 1000);
     }
 }
 

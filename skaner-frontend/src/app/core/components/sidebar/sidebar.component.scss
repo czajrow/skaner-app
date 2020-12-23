@@ -20,8 +20,8 @@
     justify-content: center;
     width: 100%;
     height: 72px;
-    background-color: purple;
-    color: mediumpurple;
+    background-color: $color-violet-very-dark-hex;
+    color: $color-violet-very-light-hex;
   }
 
   &__items {
@@ -42,17 +42,17 @@
     &:hover,
     &--active {
       background-color: plum;
-      color: purple;
+      color: $color-violet-light-hex;
     }
 
     &:hover {
-      background-color: mediumpurple;
+      background-color: $color-violet-very-dark-hex;
       text-decoration: none;
     }
 
     &--active {
-      background-color: plum;
-      border-color: purple;
+      background-color: $color-violet-very-dark-hex;
+      border-color: $color-violet-very-dark-hex;
       font-weight: 900;
     }
   }
@@ -61,7 +61,7 @@
     width: 112px;
     font-weight: 600;
     margin-left: 2 * $mainsize;
-    color: rebeccapurple;
+    color: $color-violet-very-light-hex;
   }
 
   &__status {

@@ -1,63 +1,38 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ScansService, ScanViewModel } from '../../core/services/scans.service';
-import { take } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
-import { ScanningService, ScanningStatus } from '../../core/services/scanning.service';
+import { Component } from '@angular/core';
+import { IResultViewModel, IScanViewModel } from '@/core/api/types';
+import { ActivatedRoute } from '@angular/router';
+import { ScansClient } from '@/core/api/api-clients';
+import { switchMap, tap } from "rxjs/operators";
 
 @Component({
   selector: 'app-scan-details',
   templateUrl: './scan-details.component.html',
   styleUrls: ['./scan-details.component.scss']
 })
-export class ScanDetailsComponent implements OnInit, OnDestroy {
+export class ScanDetailsComponent {
 
-  public _isInProgress = false;
-  public createDate: string;
-  public _scan: ScanViewModel;
-  private _sub: Subscription;
+  public _creationDate: string;
+  public _scan: IScanViewModel;
+  public _result: IResultViewModel;
 
   constructor(
     private readonly _activatedRoute: ActivatedRoute,
-    private readonly _scansService: ScansService,
-    public readonly _scanningService: ScanningService,
-    public readonly _router: Router,
+    private readonly _scansClient: ScansClient,
   ) {
-    const id = +this._activatedRoute.snapshot.paramMap.get('id');
-    this._scansService.scans$.pipe(
-      take(1),
-    ).subscribe(scans => {
-      this._scan = scans[id];
-      this.createDate = new Date(this._scan.createDate).toDateString();
-      this._isInProgress = this._scan.status !== ScanningStatus.Done;
-      if (this._isInProgress) {
-        this.watchScan();
-      }
-    });
-  }
-
-  ngOnInit(): void {
-  }
-
-  public onClick(): void {
-    if (this._scan) {
-      this._router.navigate(['scan-details', this._scan.id]);
+    const id: string = _activatedRoute.snapshot.paramMap.get('id');
+    if (!!id) {
+      this._scansClient.getScan(id)
+        .pipe(
+          tap((scan: IScanViewModel) => {
+            this._scan = scan;
+            const date = new Date(scan.creationDate);
+            this._creationDate = date.toLocaleString();
+          }),
+          switchMap((scan: IScanViewModel) => this._scansClient.getResult(scan.resultId)),
+        )
+        .subscribe((result: IResultViewModel) => {
+          this._result = result;
+        });
     }
   }
-
-  public watchScan(): void {
-    this._sub?.unsubscribe();
-    this._sub = this._scanningService.status$.subscribe(status => {
-      this._scansService.updateScanStatus(this._scan.id, status);
-      if (status === ScanningStatus.Done) {
-        this._isInProgress = false;
-        this._sub.unsubscribe();
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this._sub?.unsubscribe();
-  }
-
 }

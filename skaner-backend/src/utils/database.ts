@@ -1,4 +1,4 @@
-import { Db, MongoClient } from 'mongodb';
+import { Db, MongoClient, ObjectId } from 'mongodb';
 import { Observable, from } from 'rxjs';
 import { catchError, map, tap } from "rxjs/operators";
 
@@ -24,5 +24,9 @@ export class Database {
             throw 'No database connection!'
         }
         return this._db;
+    }
+
+    public getObjectId(id: number | string | ObjectId): ObjectId {
+        return new ObjectId(id);
     }
 }

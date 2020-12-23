@@ -2,14 +2,6 @@ import { NgModule } from '@angular/core';
 import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 
 const routes: Routes = [
-  // {
-  //   path: 'home',
-  //   loadChildren: () => import('@/pages/home-page/home-page.module').then(m => m.HomePageModule),
-  // },
-  // {
-  //   path: 'settings',
-  //   loadChildren: () => import('@/pages/settings-page/settings-page.module').then(m => m.SettingsPageModule),
-  // },
   {
     path: 'scanning',
     loadChildren: () => import('@/pages/scanning-page/scanning-page.module').then(m => m.ScanningPageModule),
@@ -21,6 +13,14 @@ const routes: Routes = [
   {
     path: 'scan-details',
     loadChildren: () => import('@/pages/scan-details-page/scan-details-page.module').then(m => m.ScanDetailsPageModule),
+  },
+  {
+    path: 'current-scan',
+    loadChildren: () => import('@/pages/current-scan-page/current-scan-page.module').then(m => m.CurrentScanPageModule),
+  },
+  {
+    path: 'probe',
+    loadChildren: () => import('@/pages/probe-page/probe-page.module').then(m => m.ProbePageModule),
   },
   {
     path: '**',

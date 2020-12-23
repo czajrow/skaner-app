@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 export interface ICoordinates {
     x: number;
     y: number;
@@ -41,4 +43,11 @@ export interface IProgress {
 export interface IResult {
     parameters: IParameters;
     result: string;
+}
+
+export interface IScanViewModel {
+    parameters: IParameters;
+    resultId: string;
+    creationDate: number;
+    _id: string;
 }

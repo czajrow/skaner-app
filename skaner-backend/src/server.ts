@@ -1,11 +1,11 @@
 import express = require("express");
 import request = require('request');
 import bodyParser = require('body-parser');
+import cors = require('cors');
 import { Database } from "./utils/database";
 import { from, Subject } from "rxjs";
-import { first, switchMap } from "rxjs/operators";
-import cors = require('cors')
-import { IParameters, IResult, ScannerStatus } from './classes/types'
+import { first, map, switchMap } from "rxjs/operators";
+import { IParameters, IResult, IScanViewModel, ScannerStatus } from './classes/types'
 
 const BASE_API_URL = 'http://api:3001/api'
 
@@ -67,6 +67,25 @@ app.put('/api/probe', jsonParser, (req, res) => {
     });
 });
 
+app.get('/api/parameters', (req, res) => {
+    // body: none
+    // response: IParameters as JSON
+    const url = BASE_API_URL + '/parameters';
+    const subject = new Subject<any>();
+    subject.asObservable().pipe(first()).subscribe(response => {
+        if (response.err) {
+            res.status(500);
+            res.send(response.err);
+        } else {
+            res.status(200);
+            res.send(response.body);
+        }
+    })
+    request({ url, method: 'GET', json: true }, (err, res, body) => {
+        subject.next({ err, body })
+    });
+});
+
 app.post('/api/parameters', jsonParser, (req, res) => {
     // body: IParameters as JSON
     // response: { success: boolean }
@@ -109,19 +128,90 @@ app.get('/api/status', (req, res) => {
             request({ url: resultUrl, method: 'GET', json: true }, (errr, ress, bodyy) => {
                 const scan: IResult = bodyy;
                 const db = database.getDb();
-                from(db.collection('scans').insertOne(scan)).subscribe();
+                from(db.collection('results').insertOne({ result: scan.result }))
+                    .pipe(
+                        map(data => data.insertedId),
+                        switchMap(resultId => {
+                            return from(db.collection('scans').insertOne({
+                                parameters: scan.parameters,
+                                resultId: resultId,
+                                creationDate: new Date().valueOf(),
+                            } as IScanViewModel));
+                        })
+                    ).subscribe();
             });
         }
         subject.next({ err, body })
     });
 });
 
-app.get('/api/results', (req, res) => {
+app.get('/api/scans', (req, res) => {
     const db = database.getDb();
     from(db.collection('scans').find().toArray()).subscribe((scans: []) => {
         res.status(200);
-        res.send({ scans });
+        res.send(scans);
     });
+});
+
+app.delete('/api/scan/:scanId', (req, res) => {
+    const id: string = req.params.scanId;
+    const db = database.getDb();
+    const objId = database.getObjectId(id);
+
+    from(db.collection('scans').findOneAndDelete({ "_id": objId }))
+        .pipe(
+            switchMap(scan => {
+                const resultId: string = (scan as IScanViewModel).resultId;
+                const resObjId = database.getObjectId(resultId);
+                return from(db.collection('results').findOneAndDelete({ "_id": resObjId }))
+            })
+        )
+        .subscribe(
+            () => {
+                res.status(200);
+                res.send({ id });
+            },
+            error => {
+                res.status(404);
+                res.send({ error });
+            }
+        );
+});
+
+app.get('/api/result/:resultId', (req, res) => {
+    const id: string = req.params.resultId;
+    const db = database.getDb();
+    const objId = database.getObjectId(id);
+
+    from(db.collection('results').findOne({ "_id": objId }))
+        .subscribe(
+            (scan) => {
+                res.status(200);
+                res.send(scan);
+            },
+            error => {
+                res.status(404);
+                res.send({ error });
+            }
+        );
+});
+
+app.get('/api/scan/:scanId', (req, res) => {
+    const id: string = req.params.scanId;
+    const db = database.getDb();
+    const objId = database.getObjectId(id);
+
+    from(db.collection('scans').findOne({ "_id": objId }))
+        .subscribe(
+            (scan) => {
+                res.status(200);
+                res.send(scan);
+            },
+            error => {
+                res.status(404);
+                res.send({ error });
+            }
+        );
 });
 
 const port = 3000;

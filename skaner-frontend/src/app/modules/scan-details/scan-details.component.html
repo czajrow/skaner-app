@@ -1,4 +1,31 @@
-<p>Name: {{ _scan?.name }}</p>
-<p>Created: {{ createDate }}</p>
+<app-section>
+  <div app-section-header-slot>
+    <div class="app-scan-details__header-container">
+      <h2 class="mr-2">
+        {{ _scan?.parameters.name }}
+      </h2>
+      <div class="app-scan-details__date">
+        <h6 class="m-0 p-0">{{ _creationDate }}</h6>
+      </div>
+    </div>
+  </div>
 
-<app-plot></app-plot>
+  <div app-section-content-slot>
+    <app-parameters-view
+      [parameters]="_scan?.parameters"
+    ></app-parameters-view>
+  </div>
+</app-section>
+
+<app-section class="mt-4">
+  <div app-section-header-slot>
+    <h2>Scan result visualization</h2>
+  </div>
+
+  <div app-section-content-slot>
+    {{ _result | json }}
+  </div>
+</app-section>
+
+
+

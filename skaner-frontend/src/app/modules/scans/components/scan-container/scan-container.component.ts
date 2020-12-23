@@ -1,65 +1,48 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ScansService, ScanViewModel } from '../../../../core/services/scans.service';
-import { ScanningService, ScanningStatus } from '../../../../core/services/scanning.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IScanViewModel } from '@/core/api/types';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ScansClient } from '@/core/api/api-clients';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-scan-container',
   templateUrl: './scan-container.component.html',
   styleUrls: ['./scan-container.component.scss']
 })
-export class ScanContainerComponent implements OnInit, OnDestroy {
+export class ScanContainerComponent {
 
-  public _isInProgress = false;
-
-  // public _status: ScanningStatus;
-  public createDate: string;
-  private _sub: Subscription;
+  public _creationDate: string;
+  public _scan: IScanViewModel;
+  @Input() editMode: boolean;
+  @Output() deleted: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(
-    public readonly _scanningService: ScanningService,
-    public readonly _scansService: ScansService,
-    public readonly _router: Router,
+    private readonly _router: Router,
+    private readonly _scansClient: ScansClient,
+    private readonly _toastrService: ToastrService,
   ) {
   }
 
-  public _scan: ScanViewModel;
-
-  @Input() set scan(value: ScanViewModel) {
+  @Input() set scan(value: IScanViewModel) {
     if (value) {
       this._scan = value;
-      this.createDate = new Date(value.createDate).toDateString();
-      // this._status = value.status;
-      this._isInProgress = value.status !== ScanningStatus.Done;
-      if (this._isInProgress) {
-        this.watchScan();
-      }
+      const date = new Date(value.creationDate);
+      this._creationDate = date.toLocaleString();
     }
-  }
-
-  ngOnInit(): void {
   }
 
   public onClick(): void {
-    if (this._scan) {
-      this._router.navigate(['scan-details', this._scan.id]);
+    this._router.navigate(['scan-details', this._scan?._id]);
+  }
+
+  public onDelete(e: Event): void {
+    e.stopPropagation();
+    if (window.confirm(`Do you want to delete '${this._scan.parameters.name}'?`)) {
+      this._scansClient.deleteScan(this._scan._id).subscribe(id => {
+        this.deleted.emit(id);
+        this._toastrService.info('\'' + this._scan.parameters.name + '\' deleted');
+      });
     }
   }
 
-  public watchScan(): void {
-    this._sub?.unsubscribe();
-    this._sub = this._scanningService.status$.subscribe(status => {
-      // this._status = status;
-      this._scansService.updateScanStatus(this._scan.id, status);
-      if (status === ScanningStatus.Done) {
-        this._isInProgress = false;
-        this._sub.unsubscribe();
-      }
-    });
-  }
-
-  ngOnDestroy(): void {
-    this._sub?.unsubscribe();
-  }
 }

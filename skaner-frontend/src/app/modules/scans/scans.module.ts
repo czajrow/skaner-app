@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ScansComponent } from './scans.component';
 import { ScanContainerComponent } from './components/scan-container/scan-container.component';
 import { SectionModule } from '../../shared/section/section.module';
+import { InfoBoxModule } from "../../shared/info-box/info-box.module";
 
 
 
@@ -11,9 +12,10 @@ import { SectionModule } from '../../shared/section/section.module';
     exports: [
         ScansComponent
     ],
-  imports: [
-    CommonModule,
-    SectionModule
-  ]
+    imports: [
+        CommonModule,
+        SectionModule,
+        InfoBoxModule
+    ]
 })
 export class ScansModule { }
