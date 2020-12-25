@@ -23,7 +23,9 @@
   </div>
 
   <div app-section-content-slot>
-    {{ _result | json }}
+    <app-plot
+      [data]="_result?.result"
+    ></app-plot>
   </div>
 </app-section>
 

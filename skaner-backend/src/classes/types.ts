@@ -42,7 +42,7 @@ export interface IProgress {
 
 export interface IResult {
     parameters: IParameters;
-    result: string;
+    result: any;
 }
 
 export interface IScanViewModel {

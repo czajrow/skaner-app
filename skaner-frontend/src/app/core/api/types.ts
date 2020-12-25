@@ -29,11 +29,6 @@ export interface IProgress {
   total: number;
 }
 
-export interface IResult {
-  parameters: IParameters;
-  result: string;
-}
-
 export interface IParameters {
   name: string;
   minX: number;
@@ -58,5 +53,6 @@ export interface IScanViewModel {
 }
 
 export interface IResultViewModel {
-
+  result: [][][][];
+  _id: string;
 }

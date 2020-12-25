@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-plot',
@@ -7,7 +7,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PlotComponent implements OnInit {
 
-  data = [
+  @Input() set data(data: [][][][]) {
+    if (data) {
+      console.log('AAA', data);
+      this._data[0].z = data[0][0];
+    }
+  }
+
+  public _data = [
     {
       z: [
         [8.83, 8.89, 8.81, 8.87, 8.9, 8.87],
@@ -31,7 +38,7 @@ export class PlotComponent implements OnInit {
     },
   ];
 
-  layout = {
+  public _layout = {
     title: 'Plot',
     autosize: true,
     width: 500,
