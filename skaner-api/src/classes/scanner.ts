@@ -76,12 +76,13 @@ class Scanner implements IScanner {
             }
         })
 
-        const rawData = fs.readFileSync('./src/data/test.json');
+        const rawData = fs.readFileSync('./src/data/M.json');
         const arr = JSON.parse(rawData);
         this._result = {
             parameters: this._params,
             result: arr,
         };
+        console.log('DATA WRITTEN');
     }
 
     getParameters(): IParameters {

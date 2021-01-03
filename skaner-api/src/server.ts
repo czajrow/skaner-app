@@ -3,6 +3,8 @@ import bodyParser = require('body-parser')
 import { SCANNER } from "./classes/scanner";
 import cors = require('cors')
 import { ICoordinates, IParameters, IScanStatus } from "./classes/types";
+import fs = require('fs');
+import { Readable } from 'stream';
 
 const app = express();
 const jsonParser = bodyParser.json()
@@ -51,8 +53,11 @@ app.get('/api/result', (req, res) => {
     // response: (IResult | { error: string }) as JSON
     const result = SCANNER.getResult();
     if (!!result) {
-        res.status(200);
-        res.send(result);
+        res.status(200)
+        const a = new Readable({ objectMode: true });
+        a.push(JSON.stringify(result));
+        a.push(null);
+        a.pipe(res);
     } else {
         res.status(404);
         res.send({ error: 'You have to finish scan before downloading results.' });

@@ -6,6 +6,7 @@ import { Database } from "./utils/database";
 import { from, Subject } from "rxjs";
 import { first, map, switchMap } from "rxjs/operators";
 import { IParameters, IResult, IScanViewModel, ScannerStatus } from './classes/types'
+import { Readable } from 'stream';
 
 const BASE_API_URL = 'http://api:3001/api'
 
@@ -127,6 +128,7 @@ app.get('/api/status', (req, res) => {
             const resultUrl = BASE_API_URL + '/result';
             request({ url: resultUrl, method: 'GET', json: true }, (errr, ress, bodyy) => {
                 const scan: IResult = bodyy;
+                console.log('RESPONSE', scan.result[0][0][0]);
                 const db = database.getDb();
                 from(db.collection('results').insertOne({ result: scan.result }))
                     .pipe(
