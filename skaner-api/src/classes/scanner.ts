@@ -2,6 +2,7 @@ import { ICoordinates, IParameters, IProbe, IProgress, IResult, IScanner, IScanS
 import { PROBE } from "./probe";
 import { BehaviorSubject, interval } from "rxjs";
 import { finalize, take } from "rxjs/operators";
+const fs = require('fs');
 
 class Scanner implements IScanner {
 
@@ -34,24 +35,24 @@ class Scanner implements IScanner {
         interval(100).pipe(
             take(this._scanningPointsNum),
             finalize(() => {
-                const arr = [];
-                const dim = 10;
-                for (let i = 0; i < dim; i++) {
-                    arr[i] = [];
-                    for (let j = 0; j < dim; j++) {
-                        arr[i][j] = [];
-                        for (let k = 0; k < dim; k++) {
-                            arr[i][j][k] = [];
-                            for (let l = 0; l < dim; l++) {
-                                arr[i][j][k][l] = Math.random();
-                            }
-                        }
-                    }
-                }
-                this._result = {
-                    parameters: this._params,
-                    result: arr,
-                };
+                // const arr = [];
+                // const dim = 10;
+                // for (let i = 0; i < dim; i++) {
+                //     arr[i] = [];
+                //     for (let j = 0; j < dim; j++) {
+                //         arr[i][j] = [];
+                //         for (let k = 0; k < dim; k++) {
+                //             arr[i][j][k] = [];
+                //             for (let l = 0; l < dim; l++) {
+                //                 arr[i][j][k][l] = Math.random();
+                //             }
+                //         }
+                //     }
+                // }
+                // this._result = {
+                //     parameters: this._params,
+                //     result: arr,
+                // };
                 this._scanStatus.next({
                     scannerStatus: ScannerStatus.Done,
                     progress: null
@@ -74,6 +75,13 @@ class Scanner implements IScanner {
                 })
             }
         })
+
+        const rawData = fs.readFileSync('./src/data/test.json');
+        const arr = JSON.parse(rawData);
+        this._result = {
+            parameters: this._params,
+            result: arr,
+        };
     }
 
     getParameters(): IParameters {
@@ -85,6 +93,7 @@ class Scanner implements IScanner {
     }
 
     getResult(): IResult {
+        console.log('Does data exist:', !!this._result.result);
         const result = { ...this._result };
         this._result = null;
         this._scanStatus.next({ scannerStatus: ScannerStatus.Connected, progress: null });
