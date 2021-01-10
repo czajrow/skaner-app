@@ -12,6 +12,7 @@ export class PlotComponent implements OnInit {
   public _formGroup: FormGroup;
   public _zValues: number[] = [];
   public _fValues: number[] = [];
+  private _resultData: [][][][];
 
   constructor(
     private readonly _formBuilder: FormBuilder,
@@ -22,26 +23,25 @@ export class PlotComponent implements OnInit {
     });
 
     this._formGroup.valueChanges.subscribe(form => {
-      console.log(form);
+      this.setPlotData(form.z, form.f);
     });
   }
 
   @Input() set data(data: { result: [][][][], parameters: IParameters }) {
     if (data) {
       // console.log('AAA', data);
-      const result = data.result; // f, z, x, y
+      this._resultData = data.result; // f, z, x, y
       // this._data[0].x = data[0][0].map(val => 'x' + val);
       // this._data[0].y = data[0][0][0].map(val => 'y' + val);
       const params = data.parameters;
-      const xCount = result[0][0].length;
-      const yCount = result[0][0][0].length;
-      const zCount = result[0].length;
-      const fCount = result.length;
+      const xCount = this._resultData[0][0].length;
+      const yCount = this._resultData[0][0][0].length;
+      const zCount = this._resultData[0].length;
+      const fCount = this._resultData.length;
       const x = [];
       const y = [];
       for (let i = 0; i < xCount; i++) {
         x.push(params.minX + i * params.stepX);
-
       }
       for (let i = 0; i < yCount; i++) {
         y.push(params.minY + i * params.stepY);
@@ -54,7 +54,8 @@ export class PlotComponent implements OnInit {
       }
       this._data[0].x = x;
       this._data[0].y = y;
-      this._data[0].z = result[0][0];
+      // this._data[0].z = result[0][0];
+      this.setPlotData(0, 0);
     }
   }
 
@@ -115,6 +116,9 @@ export class PlotComponent implements OnInit {
     // }
   };
 
+  private setPlotData(z: number, f: number): void {
+    this._data[0].z = this._resultData[f][z];
+  }
   ngOnInit(): void {
   }
 

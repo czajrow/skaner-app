@@ -58,7 +58,7 @@ class Scanner implements IScanner {
                             for (let l = 0; l < 15*dim; l++) {
                                 // arr[i][j][k][l] = Math.random();
                                 const zoom = 60;
-                                arr[i][j][k][l] = (perlin2(k / zoom, l / zoom) + 0.5) * 46 - 55;
+                                arr[i][j][k][l] = (perlin2(127*i + 89*j + k / zoom,89*i + 127*j +  l / zoom) + 0.5) * 46 - 55;
                             }
                         }
                     }
