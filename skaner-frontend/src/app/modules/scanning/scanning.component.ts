@@ -60,17 +60,17 @@ export class ScanningComponent implements OnInit {
 
   public onFillForm(): void {
     this._formGroup.patchValue({
-      name: 'Test name',
+      name: 'Scan 1',
       minX: 100,
       maxX: 200,
       stepX: 1,
       minY: 200,
-      maxY: 300,
-      stepY: 2,
-      minZ: 10,
-      maxZ: 30,
-      stepZ: 1,
-      minFrequency: 1,
+      maxY: 350,
+      stepY: 1,
+      minZ: 15,
+      maxZ: 20,
+      stepZ: 5,
+      minFrequency: 10,
       maxFrequency: 20,
       stepFrequency: 1,
     });

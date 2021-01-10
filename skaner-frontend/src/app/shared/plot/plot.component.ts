@@ -1,18 +1,68 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IParameters } from "../../core/api/types";
+import { FormBuilder, FormGroup } from "@angular/forms";
 
 @Component({
   selector: 'app-plot',
   templateUrl: './plot.component.html',
-  styleUrls: ['./plot.component.scss']
+  styleUrls: ['./plot.component.scss'],
 })
 export class PlotComponent implements OnInit {
 
-  @Input() set data(data: [][][][]) {
+  public _formGroup: FormGroup;
+  public _zValues: number[] = [];
+  public _fValues: number[] = [];
+
+  constructor(
+    private readonly _formBuilder: FormBuilder,
+  ) {
+    this._formGroup = this._formBuilder.group({
+      z: [0],
+      f: [0],
+    });
+
+    this._formGroup.valueChanges.subscribe(form => {
+      console.log(form);
+    });
+  }
+
+  @Input() set data(data: { result: [][][][], parameters: IParameters }) {
     if (data) {
-      console.log('AAA', data);
-      this._data[0].z = data[0][0];
+      // console.log('AAA', data);
+      const result = data.result; // f, z, x, y
+      // this._data[0].x = data[0][0].map(val => 'x' + val);
+      // this._data[0].y = data[0][0][0].map(val => 'y' + val);
+      const params = data.parameters;
+      const xCount = result[0][0].length;
+      const yCount = result[0][0][0].length;
+      const zCount = result[0].length;
+      const fCount = result.length;
+      const x = [];
+      const y = [];
+      for (let i = 0; i < xCount; i++) {
+        x.push(params.minX + i * params.stepX);
+
+      }
+      for (let i = 0; i < yCount; i++) {
+        y.push(params.minY + i * params.stepY);
+      }
+      for (let i = 0; i < zCount; i++) {
+        this._zValues.push(params.minZ + i * params.stepZ);
+      }
+      for (let i = 0; i < fCount; i++) {
+        this._fValues.push(params.minFrequency + i * params.stepFrequency);
+      }
+      this._data[0].x = x;
+      this._data[0].y = y;
+      this._data[0].z = result[0][0];
     }
   }
+
+  // @Input() set params(data: IParameters) {
+  //   if (data) {
+  //     this._data[0].x = data[0][0].ma;
+  //   }
+  // }
 
   public _data = [
     {
@@ -33,16 +83,30 @@ export class PlotComponent implements OnInit {
         // [8.99, 8.99, 8.98, 9.18, 9.2, 9.19],
         // [8.93, 8.97, 8.97, 9.18, 9.2, 9.18]
       ],
-      type: 'surface',
+      x: [],
+      y: [],
+      type: 'heatmap',
       marker: { color: 'red' },
     },
   ];
 
   public _layout = {
-    title: 'Plot',
+    title: 'Scan Results [dBm]',
     autosize: true,
     width: 500,
     height: 500,
+    yaxis: {
+      automargin: true,
+      title: {
+        text: 'Y value [mm]',
+        standoff: 40
+      }},
+    xaxis: {
+      automargin: true,
+      title: {
+        text: 'X value [mm]',
+        standoff: 20
+      }},
     // margin: {
     //   l: 65,
     //   r: 50,
@@ -50,9 +114,6 @@ export class PlotComponent implements OnInit {
     //   t: 90,
     // }
   };
-
-  constructor() {
-  }
 
   ngOnInit(): void {
   }

@@ -24,7 +24,7 @@
 
   <div app-section-content-slot>
     <app-plot
-      [data]="_result?.result"
+      [data]="{result: _result?.result, parameters: _scan?.parameters}"
     ></app-plot>
   </div>
 </app-section>

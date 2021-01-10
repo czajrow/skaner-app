@@ -1,3 +1,27 @@
+<form [formGroup]="_formGroup">
+  <label>
+    Z value:
+    <select formControlName="z">
+      <option
+        *ngFor="let x of _zValues; let i = index"
+        [value]="i"
+      >
+        {{ x }} mm
+      </option>
+    </select>
+  </label>
+  <label class="ml-2">
+    Frequency value:
+    <select formControlName="f">
+      <option
+        *ngFor="let f of _fValues; let i = index"
+        [value]="i"
+      >
+        {{ f }} MHz
+      </option>
+    </select>
+  </label>
+</form>
 <plotly-plot
   [data]="_data"
   [layout]="_layout"

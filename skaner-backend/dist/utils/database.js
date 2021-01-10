@@ -23,6 +23,9 @@ var Database = /** @class */ (function () {
         }
         return this._db;
     };
+    Database.prototype.getObjectId = function (id) {
+        return new mongodb_1.ObjectId(id);
+    };
     return Database;
 }());
 exports.Database = Database;

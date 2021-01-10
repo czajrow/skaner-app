@@ -2,6 +2,17 @@ import { ICoordinates, IParameters, IProbe, IProgress, IResult, IScanner, IScanS
 import { PROBE } from "./probe";
 import { BehaviorSubject, interval } from "rxjs";
 import { finalize, take } from "rxjs/operators";
+import {perlin, factories} from '@trinkets/noise'
+import {random} from '@trinkets/random'
+
+const perlin2 = factories.perlin({
+    // function() that, when called, returns an assumed random number between 0 and 1,
+    // per the definition of Math.random. Here we use the one from @trinkets/random.
+    random,
+    // Jitter offsets the zero of the surflet from integer values of x, y.
+    // False to turn off jitter (default is true).
+    jitter: false,
+})
 
 class Scanner implements IScanner {
 
@@ -14,7 +25,8 @@ class Scanner implements IScanner {
 
     constructor() {
         this._probe = PROBE;
-        this._scanStatus = new BehaviorSubject<IScanStatus>({ scannerStatus: ScannerStatus.Connected, progress: null })
+        this._scanStatus = new BehaviorSubject<IScanStatus>({ scannerStatus: ScannerStatus.Connected, progress: null });
+
     }
 
     moveProbe(coordinates: ICoordinates): void {
@@ -36,14 +48,17 @@ class Scanner implements IScanner {
             finalize(() => {
                 const arr = [];
                 const dim = 10;
-                for (let i = 0; i < dim; i++) {
+
+                for (let i = 0; i < dim; i++) { // f, z, x, y
                     arr[i] = [];
-                    for (let j = 0; j < dim; j++) {
+                    for (let j = 0; j < 2; j++) { // one Z
                         arr[i][j] = [];
-                        for (let k = 0; k < dim; k++) {
+                        for (let k = 0; k < 10*dim; k++) {
                             arr[i][j][k] = [];
-                            for (let l = 0; l < dim; l++) {
-                                arr[i][j][k][l] = Math.random();
+                            for (let l = 0; l < 15*dim; l++) {
+                                // arr[i][j][k][l] = Math.random();
+                                const zoom = 60;
+                                arr[i][j][k][l] = (perlin2(k / zoom, l / zoom) + 0.5) * 46 - 55;
                             }
                         }
                     }

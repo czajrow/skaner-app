@@ -3,10 +3,10 @@ exports.__esModule = true;
 var express = require("express");
 var request = require("request");
 var bodyParser = require("body-parser");
+var cors = require("cors");
 var database_1 = require("./utils/database");
 var rxjs_1 = require("rxjs");
 var operators_1 = require("rxjs/operators");
-var cors = require("cors");
 var types_1 = require("./classes/types");
 var BASE_API_URL = 'http://api:3001/api';
 var app = express();
@@ -125,12 +125,14 @@ app.get('/api/status', function (req, res) {
             request({ url: resultUrl, method: 'GET', json: true }, function (errr, ress, bodyy) {
                 var scan = bodyy;
                 var db = database.getDb();
-                rxjs_1.from(db.collection('results').insertOne(scan.result))
-                    .pipe(operators_1.tap(function (data) { return console.log('results-data', data.ops); }), operators_1.map(function (data) { return data.insertedId; }), operators_1.switchMap(function (resultId) {
-                    console.log('resultId', resultId);
-                    console.log('parameters', scan.parameters);
-                    return rxjs_1.from(db.collection('scans').insertOne({ parameters: scan.parameters, resultId: resultId }));
-                })).subscribe(function (a) { return console.log('scans-data', a.ops); });
+                rxjs_1.from(db.collection('results').insertOne({ result: scan.result }))
+                    .pipe(operators_1.map(function (data) { return data.insertedId; }), operators_1.switchMap(function (resultId) {
+                    return rxjs_1.from(db.collection('scans').insertOne({
+                        parameters: scan.parameters,
+                        resultId: resultId,
+                        creationDate: new Date().valueOf()
+                    }));
+                })).subscribe();
             });
         }
         subject.next({ err: err, body: body });
@@ -140,16 +142,52 @@ app.get('/api/scans', function (req, res) {
     var db = database.getDb();
     rxjs_1.from(db.collection('scans').find().toArray()).subscribe(function (scans) {
         res.status(200);
-        res.send({ scans: scans });
+        res.send(scans);
+    });
+});
+app["delete"]('/api/scan/:scanId', function (req, res) {
+    var id = req.params.scanId;
+    var db = database.getDb();
+    var objId = database.getObjectId(id);
+    rxjs_1.from(db.collection('scans').findOneAndDelete({ "_id": objId }))
+        .pipe(operators_1.switchMap(function (scan) {
+        var resultId = scan.resultId;
+        var resObjId = database.getObjectId(resultId);
+        return rxjs_1.from(db.collection('results').findOneAndDelete({ "_id": resObjId }));
+    }))
+        .subscribe(function () {
+        res.status(200);
+        res.send({ id: id });
+    }, function (error) {
+        res.status(404);
+        res.send({ error: error });
+    });
+});
+app.get('/api/result/:resultId', function (req, res) {
+    var id = req.params.resultId;
+    var db = database.getDb();
+    var objId = database.getObjectId(id);
+    rxjs_1.from(db.collection('results').findOne({ "_id": objId }))
+        .subscribe(function (scan) {
+        res.status(200);
+        res.send(scan);
+    }, function (error) {
+        res.status(404);
+        res.send({ error: error });
     });
 });
 app.get('/api/scan/:scanId', function (req, res) {
-    console.log('req.params.scanId', req.params.scanId);
-    // const db = database.getDb();
-    // from(db.collection('scans').find().toArray()).subscribe((scans: []) => {
-    //     res.status(200);
-    //     res.send({ scans });
-    // });
+    var id = req.params.scanId;
+    var db = database.getDb();
+    var objId = database.getObjectId(id);
+    rxjs_1.from(db.collection('scans').findOne({ "_id": objId }))
+        .subscribe(function (scan) {
+        res.status(200);
+        res.send(scan);
+    }, function (error) {
+        res.status(404);
+        res.send({ error: error });
+    });
 });
 var port = 3000;
 database.connect().subscribe(function () {
