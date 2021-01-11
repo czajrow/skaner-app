@@ -38,6 +38,7 @@ export class ScanningComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.onFillForm();
   }
 
   public onDismiss(): void {

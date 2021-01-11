@@ -99,12 +99,12 @@
       >
         Dismiss
       </button>
-      <button
-        (click)="onFillForm()"
-        class="btn btn-primary ml-2 mr-2"
-      >
-        Fill Form
-      </button>
+<!--      <button-->
+<!--        (click)="onFillForm()"-->
+<!--        class="btn btn-primary ml-2 mr-2"-->
+<!--      >-->
+<!--        Fill Form-->
+<!--      </button>-->
       <button
         [disabled]="_formGroup.invalid || (_statusService.scanInProgress$ | async)"
         (click)="onSubmit()"
